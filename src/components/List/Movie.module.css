@@ -1,0 +1,14 @@
+.movie{
+    margin: 1rem;
+    padding: 5px;
+    background-color: inherit;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    border-radius: 12px;
+    text-align: center;
+    color: black;
+}
+
+.movie p{
+    font-size: 1.25rem;
+    font-weight: bold;
+}

@@ -1,0 +1,18 @@
+.result {
+    padding: 5px;
+    width: 100%;
+    border-bottom: 1px solid black;
+    list-style-type: none;
+    text-align: left;
+    background-color: rgb(211, 211, 211);
+    cursor: pointer;
+}
+
+.result:hover {
+    color: white;
+    background-color: black;
+}
+
+.result span {
+    font-size: 15px;
+}

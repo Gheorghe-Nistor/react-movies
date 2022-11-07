@@ -1,28 +1,40 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useImperativeHandle } from 'react';
+import React, { useState, useEffect, useRef, useImperativeHandle } from 'react';
 
 import classes from './Search.module.css';
 
 const Search = React.forwardRef((props, ref) => {
+    const [disabledButton, setDisabledButton] = useState(true);
     const [inputValue, setInputValue] = useState('');
+    const movieTitleRef = useRef('');
+    const movieID = useRef(0);
     useEffect(() => {
-        if (inputValue === '') return;
+        if (inputValue.length < 2) return;
         const intervalID = setTimeout(() => {
-            console.log(inputValue);
-        }, 750);
+            props.searchMovie(inputValue);
+        }, 700);
         return () => {
             clearTimeout(intervalID);
         };
     }, [inputValue]);
-    const movieTitleRef = useRef('');
+    useEffect(() => {
+        if (inputValue === '') return;
+        const intervalID = setTimeout(() => {
+            const found = props.searchResults.find(
+                (element) =>
+                    inputValue.toLowerCase() === element.title.toLowerCase()
+            );
+            if (found !== undefined) movieID.current = found.id;
+            setDisabledButton(found === undefined);
+        }, 250);
+        return () => {
+            clearTimeout(intervalID);
+        };
+    }, [inputValue, props.searchResults]);
     const submitHandler = async (event) => {
         event.preventDefault();
-        const movie = {
-            title: inputValue
-        };
         movieTitleRef.current.value = '';
         props.changeIsToggle(!props.isToggle);
-        props.onAddMovie(movie);
+        props.onAddMovie(movieID.current);
     };
     useImperativeHandle(ref, () => {
         return {
@@ -39,10 +51,11 @@ const Search = React.forwardRef((props, ref) => {
                 type="text"
                 id="movieTitle"
                 autoComplete="off"
+                placeholder="search movie here..."
                 ref={movieTitleRef}
                 onChange={(e) => setInputValue(e.target.value)}
             ></input>
-            <button disabled={inputValue === ''} onClick={submitHandler}>
+            <button disabled={disabledButton} onClick={submitHandler}>
                 Add Movie
             </button>
         </form>

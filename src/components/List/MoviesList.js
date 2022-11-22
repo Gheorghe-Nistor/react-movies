@@ -4,7 +4,9 @@ import Movie from './Movie';
 import classes from './MoviesList.module.css';
 
 const MoviesList = (props) => {
-    console.log(props);
+    const openTrailerHandler = (link) => {
+        props.openTrailer(link);
+    };
     return (
         <ul className={classes['movies-list']}>
             {props.movies.map((movie) => (
@@ -16,6 +18,7 @@ const MoviesList = (props) => {
                     poster={movie.poster}
                     runTime={movie.runTime}
                     trailer={movie.trailer}
+                    openTrailer={openTrailerHandler}
                 />
             ))}
         </ul>

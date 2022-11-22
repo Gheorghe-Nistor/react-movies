@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import './App.css';
 import Header from './components/UI/Header';
 import AddMovie from './components/Add/AddMovie';
 import MoviesList from './components/List/MoviesList';
+import Modal from './components/UI/Modal';
 
 function App() {
     const [moviesList, setMoviesList] = useState([]);
+    const [trailerIsShown, setTrailerIsShown] = useState(false);
     useEffect(() => {
         async function fetchData() {
             const response = await fetch(
@@ -57,11 +59,35 @@ function App() {
             }
         );
     };
+    const trailerLink = useRef(0);
+    const openTrailerHandler = (link) => {
+        console.log('link' + link);
+        trailerLink.current = link;
+        setTrailerIsShown(true);
+    };
+    const closeTrailerHandler = () => {
+        setTrailerIsShown(false);
+    };
     return (
         <>
             <Header />
             <AddMovie onAddMovie={addMovieHandler} />
-            <MoviesList movies={moviesList} />
+            <MoviesList movies={moviesList} openTrailer={openTrailerHandler} />
+            {trailerIsShown && (
+                <Modal onClose={closeTrailerHandler}>
+                    <iframe
+                        src={`${trailerLink.current}?autoplay=false&width=854`}
+                        width={854}
+                        height={480}
+                        title="movie trailer"
+                        allowFullScreen={true}
+                        mozallowfullscreen="true"
+                        webkitallowfullscreen="true"
+                        frameBorder="no"
+                        scrolling="no"
+                    ></iframe>
+                </Modal>
+            )}
         </>
     );
 }

@@ -3,8 +3,11 @@ import React from 'react';
 import classes from './Movie.module.css';
 
 const Movie = (props) => {
+    const openTrailerHandler = () => {
+        props.openTrailer(props.trailer);
+    };
     return (
-        <li className={classes.movie}>
+        <li className={classes.movie} onClick={openTrailerHandler}>
             <p className={classes.title}>
                 {props.title} ({props.year})
             </p>
